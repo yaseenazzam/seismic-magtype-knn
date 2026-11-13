@@ -1,89 +1,95 @@
-# Seismic Magnitude Type Classification with k-NN
+# Seismic Magnitude Type Classification using k-NN
 
-This repository contains a machine learning project for classifying earthquake
-magnitude types (`magType`) using k-Nearest Neighbours (k-NN). The project was
-completed as part of the CURE project in ENDG 319 at the University of Calgary.
+A machine learning project that classifies earthquake magnitude types using **k-Nearest Neighbours (k-NN)**, achieving **90.3% test accuracy**.
 
-## Overview
+Developed as part of the Course-Based Undergraduate Research Experience (CURE) in ENDG 319 at the University of Calgary.
 
-We build a supervised learning pipeline to predict the magnitude type of an
-earthquake using four attributes:
+## Technologies
 
-- `mag` (magnitude)
-- `longitude`
-- `latitude`
-- `depth`
+**Python · scikit-learn · NumPy · Pandas · Matplotlib · Jupyter Notebook**
 
-The goal is to compare different scalers and values of *k* and then select a
-final model based on test performance and generalization behaviour.
+## Project Overview
 
-## Methods
+This project explores the use of supervised machine learning to predict earthquake magnitude types (`magType`) from seismic data.
 
-- **Model:** k-Nearest Neighbours classifier
-- **Features:** `mag`, `longitude`, `latitude`, `depth`
-- **Target:** `magType`
-- **Preprocessing:**
-  - Train–test split
-  - Feature scaling with:
-    - `MinMaxScaler`
-    - `StandardScaler`
-- **Evaluation:**
-  - Accuracy on train and test sets
-  - Accuracy vs. k (for k = 1 … 30)
-  - Confusion matrix for the final model
+The classification model uses four features:
 
-## Experiments
+- **Magnitude (`mag`)**
+- **Longitude**
+- **Latitude**
+- **Depth**
 
-### 1. Accuracy vs. k
+The primary objective was to evaluate how feature scaling and the number of nearest neighbours affect classification accuracy and model generalization.
 
-For both `MinMaxScaler` and `StandardScaler` we plotted:
+## Methodology
 
-- Training accuracy as a function of k  
-- Test accuracy as a function of k  
+### 1. Data Preprocessing
 
-This allowed us to see how the model overfits for small k and how performance
-stabilizes for larger k.
+- Prepared seismic data for supervised classification.
+- Split data into training and testing sets.
+- Compared two feature scaling techniques:
+  - `MinMaxScaler`
+  - `StandardScaler`
 
-> Figures:  
-> - `figures/accuracy_vs_k_minmax.png`  
-> - `figures/accuracy_vs_k_standard.png`
+### 2. Model Development
 
-### 2. Comparing scalers
+Implemented a k-Nearest Neighbours classifier using scikit-learn.
 
-Both scalers were tested over the same range of k values. We observed that
-`MinMaxScaler` provided slightly better test accuracy for the best-performing
-region of k and was chosen for the final model.
+Evaluated values of **k = 1–30** to investigate the relationship between model complexity, overfitting, and classification performance.
 
-## Final Model
+### 3. Model Evaluation
 
-- **Model:** k-NN
-- **k:** 8
-- **Scaler:** `MinMaxScaler`
-- **Training accuracy:** 0.919
-- **Test accuracy:** 0.903
+Compared training and test accuracy across different values of k and feature scaling methods.
 
-These values indicate good generalization from train to test data.
+Used a confusion matrix to examine classification performance across individual magnitude types.
 
-## Confusion Matrix
+## Results
 
-We computed a 21×21 confusion matrix (rows = true labels, columns = predicted
-labels) for all `magType` classes.
+| Metric | Result |
+|---|---|
+| Algorithm | k-Nearest Neighbours |
+| Optimal k selected | 8 |
+| Feature scaling | MinMaxScaler |
+| Training accuracy | 91.9% |
+| Test accuracy | **90.3%** |
+| Target classes | 21 |
 
-Key observations:
+`MinMaxScaler` produced slightly better test accuracy in the best-performing region of k values compared with `StandardScaler`.
 
-- Most correct predictions lie on the diagonal, especially for the most common
-  magnitude types.
-- Misclassifications occur mainly in rare classes, which is expected given the
-  strong class imbalance in the dataset.
-- The model performs best on frequent `magType` labels and less reliably on
-  underrepresented ones.
+The selected model achieved similar training and test accuracy, although performance varied across individual magnitude types.
 
-## Example Inference
+### Key Findings
 
-We also tested the final model on a new, unseen instance:
+- Feature scaling affected k-NN classification performance.
+- Smaller values of k showed a greater tendency toward overfitting.
+- More frequently represented magnitude types were classified more reliably.
+- Less common classes were more challenging to predict due to class imbalance.
 
-```text
-mag = 5.6
-longitude = -120.5
-latitude = 34.2
-depth = 10.0
+## Example Prediction
+
+The trained model was also evaluated on an example earthquake with the following characteristics:
+
+```python
+sample = {
+    "mag": 5.6,
+    "longitude": -120.5,
+    "latitude": 34.2,
+    "depth": 10.0
+}
+```
+
+The sample demonstrates how new earthquake measurements can be passed through the trained classification pipeline.
+
+## Limitations and Future Improvements
+
+While the model achieved 90.3% overall test accuracy, several limitations remain:
+
+- **Class imbalance:** The model performs less consistently on underrepresented magnitude types.
+- **Limited feature selection:** Only four seismic attributes were used.
+- **Model selection:** Additional cross-validation could improve confidence in hyperparameter selection.
+
+Potential improvements include evaluating class-specific precision and recall, experimenting with additional features, and comparing k-NN against other classification algorithms.
+
+## Acknowledgements
+
+Developed as part of the ENDG 319 CURE project at the University of Calgary.
